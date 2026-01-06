@@ -7,3 +7,4 @@ Personal_Workflow.md
 dist/
 build/
 *.whl
+.venv
