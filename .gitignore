@@ -1,1 +1,9 @@
 Personal_Workflow.md
+
+
+# Python packaging
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
