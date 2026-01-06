@@ -8,3 +8,7 @@ dist/
 build/
 *.whl
 .venv
+
+
+# Others
+.ruff_cache
