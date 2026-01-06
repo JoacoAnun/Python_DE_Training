@@ -38,4 +38,3 @@ jobs:
     - name: Type checking with mypy (optional)
       run: |
         mypy . --ignore-missing-imports || true
-      continue-on-error: true
