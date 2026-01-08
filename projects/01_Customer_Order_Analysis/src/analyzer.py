@@ -66,3 +66,8 @@ def analyze_data() -> None:
 
     all_data_concat.to_csv(output_data_path / f"output_{today_time_str}.csv")
     all_bad_data_concat.to_csv(bad_data_path / f"bad_data_{today_time_str}.csv")
+
+    return {
+        "rows_processed: ": len(all_data_concat),
+        "bad_rows_encountered: ": len(all_bad_data_concat),
+    }
