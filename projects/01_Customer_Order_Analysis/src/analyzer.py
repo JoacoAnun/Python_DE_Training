@@ -38,7 +38,6 @@ def analyze_data() -> None:
 
     # Iteration for every file available to process
     for file in input_files:
-        print(file.resolve())
         data = pd.read_csv(file.resolve(), comment="#")
 
         # Format normalization
