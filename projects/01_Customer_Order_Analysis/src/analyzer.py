@@ -65,6 +65,4 @@ def analyze_data() -> None:
     all_bad_data_concat = all_bad_data_concat.set_index("order_id")
 
     all_data_concat.to_csv(output_data_path / f"output_{today_time_str}.csv")
-    all_bad_data_concat.to_csv(
-        bad_data_path / f"bad_data_{today_time_str}.csv", mode="a", header=False
-    )
+    all_bad_data_concat.to_csv(bad_data_path / f"bad_data_{today_time_str}.csv")
