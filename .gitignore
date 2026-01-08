@@ -8,6 +8,7 @@ dist/
 build/
 *.whl
 .venv
+__pycache__
 
 
 # Others
