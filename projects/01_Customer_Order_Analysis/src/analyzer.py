@@ -3,6 +3,10 @@ from datetime import datetime
 
 import pandas as pd
 
+from logger import get_logger
+
+logger = get_logger(__name__)
+
 
 def analyze_data() -> None:
     """This function read all available csv data
@@ -38,7 +42,10 @@ def analyze_data() -> None:
 
     # Iteration for every file available to process
     for file in input_files:
-        data = pd.read_csv(file.resolve(), comment="#")
+        file_path = file.resolve()
+        file_name = file_path.name
+        data = pd.read_csv(file_path, comment="#")
+        logger.debug("Processing file: %s", file_name)
 
         # Format normalization
         data["status"] = data["status"].str.lower()
@@ -48,13 +55,18 @@ def analyze_data() -> None:
 
         # If bad data, remove and place in different folder for manual treatement
         if not bad_data.empty:
+            logger.info("Bad data found.")
             data = data.drop(bad_data.index)
             all_bad_data.append(bad_data)
 
         all_data.append(data)
 
         # Move the file to processed folder
-        file.replace(processed_data_path / f"orders{today_time_str}.csv")
+        output_data_file_name = f"orders_{today_time_str}.csv"
+        logger.info(
+            "Saving clean data to %s/%s", processed_data_path.resolve(), output_data_file_name
+        )
+        file.replace(processed_data_path / output_data_file_name)
 
     # Generate all data collection and write to files
     all_data_concat = pd.concat(all_data, ignore_index=True)
