@@ -1,14 +1,13 @@
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
-
 from logger import get_logger
 
 logger = get_logger(__name__)
 
 
-def analyze_data() -> None:
+def analyze_data() -> dict:
     """This function read all available csv data
     Analyze for bad data, output clean data to output folder
     output bad data to a separate csv for manual intervention
@@ -30,7 +29,7 @@ def analyze_data() -> None:
     input_files = [file for file in input_data_path.rglob("*.csv")]
 
     if not input_files:
-        return "No files to process"
+        return {"rows_processed": 0, "bad_rows_encountered": 0}
 
     # Time setting for saving files
     today_time = datetime.now()
@@ -72,13 +71,17 @@ def analyze_data() -> None:
     all_data_concat = pd.concat(all_data, ignore_index=True)
     all_data_concat = all_data_concat.set_index("order_id")
 
-    all_bad_data_concat = pd.concat(all_bad_data, ignore_index=True)
-    all_bad_data_concat = all_bad_data_concat.set_index("order_id")
-
+    if all_bad_data:
+        all_bad_data_concat = pd.concat(all_bad_data, ignore_index=True)
+        all_bad_data_concat = all_bad_data_concat.set_index("order_id")
+        all_bad_data_concat.to_csv(bad_data_path / f"bad_data_{today_time_str}.csv")
+        bad_rows = len(all_bad_data_concat)
+    else:
+        logger.info("No bad data found in csv files.")
+        bad_rows = 0
     all_data_concat.to_csv(output_data_path / f"output_{today_time_str}.csv")
-    all_bad_data_concat.to_csv(bad_data_path / f"bad_data_{today_time_str}.csv")
 
     return {
-        "rows_processed: ": len(all_data_concat),
-        "bad_rows_encountered: ": len(all_bad_data_concat),
+        "rows_processed": len(all_data_concat),
+        "bad_rows_encountered": bad_rows,
     }
