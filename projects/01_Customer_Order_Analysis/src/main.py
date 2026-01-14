@@ -17,4 +17,4 @@ if __name__ == "__main__":
         sys.exit(0)
 
     for key, value in result.items():
-        logger.debug("%s%s", key, value)
+        logger.debug("%s %s", key, value)
